@@ -518,7 +518,6 @@ document.addEventListener('DOMContentLoaded', () => {
             nex: document.getElementById('nex').value,
             origin: document.getElementById('origin').value,
             class: document.getElementById('class').value,
-            path: document.getElementById('path').value,
             money: document.getElementById('money').value,
             attributes: {
                 for: document.getElementById('attr-for').value,
@@ -548,7 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 resistance: document.getElementById('resistance').value
             },
             skills: Array.from(document.getElementById('skills-container').children).map(skill => ({
-                name: skill.querySelector('div').textContent.split(' (')[0],
+                name: skill.querySelector('.skill-item').textContent.trim(),
                 level: skill.querySelector('select').value,
                 bonus: skill.querySelector('input.skill-bonus').value
             })),
@@ -594,7 +593,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('nex').value = characterData.nex || '0';
                 document.getElementById('origin').value = characterData.origin || '';
                 document.getElementById('class').value = characterData.class || '';
-                document.getElementById('path').value = characterData.path || '';
                 document.getElementById('money').value = characterData.money || '';
 
                 // Load attributes
@@ -620,32 +618,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('protection').value = stats.protection || '0';
                 document.getElementById('resistance').value = stats.resistance || '0';
 
+                // Update progress bars
+                ['pv', 'pe', 'san'].forEach(stat => {
+                    updateProgressBar(`${stat}-current`, `${stat}-max`, `.${stat}-bar`);
+                });
+
                 // Load skills
                 const skillsContainer = document.getElementById('skills-container');
                 skillsContainer.innerHTML = '';
                 if (characterData.skills) {
                     characterData.skills.forEach(skillData => {
-                        const skill = predefinedSkills.find(s => s.name === skillData.name);
-                        if (skill) {
-                            const skillElement = createSkillElement(skill);
-                            skillElement.querySelector('select').value = skillData.level;
-                            skillElement.querySelector('input.skill-bonus').value = skillData.bonus;
-                            
-                            // Restore skill colors based on level
-                            const level = skillData.level;
-                            const skillDiv = skillElement.querySelector('.skill-item');
-                            if (level === 'Treinado') {
-                                skillDiv.style.backgroundColor = '#2d4a3e';
-                            } else if (level === 'Veterano') {
-                                skillDiv.style.backgroundColor = '#4a432d';
-                            } else if (level === 'Expert') {
-                                skillDiv.style.backgroundColor = '#4a2d2d';
-                            } else {
-                                skillDiv.style.backgroundColor = '';
-                            }
-                            
-                            skillsContainer.appendChild(skillElement);
+                        const skillElement = createSkillElement({ name: skillData.name });
+                        skillElement.querySelector('select').value = skillData.level;
+                        skillElement.querySelector('input.skill-bonus').value = skillData.bonus;
+                        
+                        // Restore skill colors based on level
+                        const level = skillData.level;
+                        const skillDiv = skillElement.querySelector('.skill-item');
+                        if (level === 'Treinado') {
+                            skillDiv.style.backgroundColor = '#2d4a3e';
+                        } else if (level === 'Veterano') {
+                            skillDiv.style.backgroundColor = '#4a432d';
+                        } else if (level === 'Expert') {
+                            skillDiv.style.backgroundColor = '#4a2d2d';
+                        } else {
+                            skillDiv.style.backgroundColor = '';
                         }
+                        
+                        skillsContainer.appendChild(skillElement);
                     });
                 }
 

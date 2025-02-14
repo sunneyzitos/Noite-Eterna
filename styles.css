@@ -59,6 +59,73 @@ body.theme-roger label {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+[data-character="Nikolai"] {
+    background: linear-gradient(to bottom, #222f33 0%, #000000 100%);
+    color: #222f33;
+}
+
+[data-character="Malta"] {
+    background: linear-gradient(to bottom, #ffb843 0%, #000000 100%);
+    color: #ffb843;
+}
+
+[data-character="Math"] {
+    background: linear-gradient(to bottom, #ffd700 0%, #000000 100%);
+    color: #ffd700;
+}
+
+[data-character="Higuruma"] {
+    background: linear-gradient(to bottom, #800000 0%, #000000 100%);
+    color: #800000;
+}
+
+[data-character="Fuzuki"] {
+    background: linear-gradient(to bottom, #dc143c 0%, #000000 100%);
+    color: #dc143c;
+}
+
+[data-character="Gl1tch"] {
+    background: linear-gradient(to bottom, #4b0082 0%, #000000 100%);
+    color: #4b0082;
+}
+
+[data-character="Alfred"] {
+    background: linear-gradient(to bottom, #000080 0%, #000000 100%);
+    color: #000080;
+}
+
+[data-character="Nikolai"] .dice-icon {
+    color: #222f33;
+}
+
+[data-character="Malta"] .dice-icon {
+    color: #ffb843;
+}
+
+[data-character="Math"] .dice-icon {
+    color: #ffd700;
+}
+
+[data-character="Higuruma"] .dice-icon {
+    color: #800000;
+}
+
+[data-character="Fuzuki"] .dice-icon {
+    color: #dc143c;
+}
+
+[data-character="Gl1tch"] .dice-icon {
+    color: #4b0082;
+}
+
+[data-character="Alfred"] .dice-icon {
+    color: #000080;
+}
+
+.incentive-value {
+    color: inherit !important;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
