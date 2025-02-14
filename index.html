@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noite Eterna Arquivados 2.0</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Noite Eterna Arquivados 2.0</h1>
+        
+        <div class="character-sheet">
+            <div class="main-column">
+                <section class="agent-info">
+                    <div class="agent-field">
+                        <label for="character-name">Nome</label>
+                        <select id="character-name">
+                            <option value="Nikolai">Nikolai</option>
+                            <option value="Math">Math</option>
+                            <option value="Gl1tch">Gl1tch</option>
+                            <option value="Malta">Malta</option>
+                            <option value="Fuzuki">Fuzuki</option>
+                            <option value="Alfred">Alfred</option>
+                            <option value="Higuruma">Higuruma</option>
+                        </select>
+                    </div>
+                    <div class="level-nex-container">
+                        <div class="level-field">
+                            <label for="level">Nível</label>
+                            <input type="number" id="level" min="1" max="20" value="1">
+                        </div>
+                        <div class="nex-field">
+                            <label for="nex">NEX</label>
+                            <input type="number" id="nex" min="0" max="99" value="0">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="statistics">
+                    <h2>Estatísticas</h2>
+                    <div class="stat-bars">
+                        <div class="stat-container">
+                            <label>PV (Pontos de Vida)</label>
+                            <div class="stat-values">
+                                <input type="number" id="pv-current" min="0" value="0" placeholder="Atual">
+                                <span>/</span>
+                                <input type="number" id="pv-max" min="0" value="0" placeholder="Máximo">
+                            </div>
+                            <div class="progress-bar pv-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                        </div>
+                        <div class="stat-container">
+                            <label>PE (Pontos de Esforço)</label>
+                            <div class="stat-values">
+                                <input type="number" id="pe-current" min="0" value="0" placeholder="Atual">
+                                <span>/</span>
+                                <input type="number" id="pe-max" min="0" value="0" placeholder="Máximo">
+                            </div>
+                            <div class="progress-bar pe-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                        </div>
+                        <div class="stat-container">
+                            <label>SAN (Sanidade)</label>
+                            <div class="stat-values">
+                                <input type="number" id="san-current" min="0" value="0" placeholder="Atual">
+                                <span>/</span>
+                                <input type="number" id="san-max" min="0" value="0" placeholder="Máximo">
+                            </div>
+                            <div class="progress-bar san-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="defense-stats">
+                        <div class="defense-stat">
+                            <label for="defense">Defesa</label>
+                            <input type="number" id="defense" min="0" value="0">
+                        </div>
+                        <div class="defense-stat">
+                            <label for="block">Bloqueio</label>
+                            <input type="number" id="block" min="0" value="0">
+                            <span id="block-bonus" class="defense-bonus">+0</span>
+                        </div>
+                        <div class="defense-stat">
+                            <label for="dodge">Esquiva</label>
+                            <input type="number" id="dodge" min="0" value="0">
+                            <span id="dodge-bonus" class="defense-bonus">+0</span>
+                        </div>
+                    </div>
+
+                    <div class="protection-stats">
+                        <div class="protection-stat">
+                            <label for="protection">Proteção</label>
+                            <input type="text" id="protection">
+                        </div>
+                        <div class="protection-stat">
+                            <label for="resistance">Resistência</label>
+                            <input type="text" id="resistance">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="attributes">
+                    <h2>Atributos</h2>
+                    <div class="attributes-grid">
+                        <div class="attribute-field">
+                            <label for="attr-for">Força (FOR)</label>
+                            <input type="number" id="attr-for" min="0" max="5" value="0">
+                        </div>
+                        <div class="attribute-field">
+                            <label for="attr-agi">Agilidade (AGI)</label>
+                            <input type="number" id="attr-agi" min="0" max="5" value="0">
+                        </div>
+                        <div class="attribute-field">
+                            <label for="attr-int">Intelecto (INT)</label>
+                            <input type="number" id="attr-int" min="0" max="5" value="0">
+                        </div>
+                        <div class="attribute-field">
+                            <label for="attr-pre">Presença (PRE)</label>
+                            <input type="number" id="attr-pre" min="0" max="5" value="0">
+                        </div>
+                        <div class="attribute-field">
+                            <label for="attr-vig">Vigor (VIG)</label>
+                            <input type="number" id="attr-vig" min="0" max="5" value="0">
+                        </div>
+                        <div class="attribute-field">
+                            <label for="attr-incentivo">Incentivo</label>
+                            <input type="number" id="attr-incentivo" min="0" value="0">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="skills">
+                    <div class="skills-header">
+                        <h2>Perícias</h2>
+                        <div class="sort-controls">
+                            <button id="sort-alphabetical" class="active">Ordem Alfabética</button>
+                            <button id="sort-attribute">Por Atributo</button>
+                        </div>
+                    </div>
+                    <div id="skills-container">
+                        <!-- Skills will be added by JavaScript -->
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="bottom-sections">
+            <section class="inventory">
+                <h2>Inventário</h2>
+                <div class="inventory-header">
+                    <label for="inventory-slots">Espaços:</label>
+                    <input type="number" id="inventory-slots" min="1" value="10">
+                    <button id="add-item-btn">Adicionar Item</button>
+                </div>
+                <div id="inventory-container"></div>
+            </section>
+
+            <section class="abilities">
+                <h2>Habilidades</h2>
+                <div class="abilities-header">
+                    <button id="add-ability-btn">Adicionar Habilidade</button>
+                </div>
+                <div id="abilities-container"></div>
+            </section>
+
+            <section class="rituals">
+                <h2>Rituais</h2>
+                <div class="rituals-header">
+                    <button id="add-ritual-btn">Adicionar Ritual</button>
+                </div>
+                <div id="rituals-container"></div>
+            </section>
+
+            <section class="notes">
+                <h2>Anotações</h2>
+                <div class="notes-header">
+                    <button id="add-note-btn">Adicionar Anotação</button>
+                </div>
+                <div id="notes-container"></div>
+            </section>
+
+            <section class="dice-history">
+                <h2>Histórico de Dados</h2>
+                <div id="dice-history-container"></div>
+            </section>
+        </div>
+
+        <div class="save-section">
+            <button id="save-btn">Salvar Ficha</button>
+            <button id="load-btn">Carregar Ficha</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

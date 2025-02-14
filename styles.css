@@ -1,0 +1,640 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #111111;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #111111 0%, #2c2c2c 100%);
+    min-height: 100vh;
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* Character-specific themes */
+body.theme-magnus {
+    background: linear-gradient(135deg, #00e5ff 0%, #006c80 100%);
+    color: #00e5ff;
+}
+
+body.theme-magnus h1,
+body.theme-magnus h2,
+body.theme-magnus label {
+    color: #00e5ff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.theme-ravi {
+    background: linear-gradient(135deg, #6b8e23 0%, #3d5214 100%);
+    color: #9bc234;
+}
+
+body.theme-ravi h1,
+body.theme-ravi h2,
+body.theme-ravi label {
+    color: #9bc234;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.theme-sergio {
+    background: linear-gradient(135deg, #ff4444 0%, #802222 100%);
+    color: #ff4444;
+}
+
+body.theme-sergio h1,
+body.theme-sergio h2,
+body.theme-sergio label {
+    color: #ff4444;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.theme-roger {
+    background: linear-gradient(135deg, #ff8c00 0%, #804600 100%);
+    color: #ffa500;
+}
+
+body.theme-roger h1,
+body.theme-roger h2,
+body.theme-roger label {
+    color: #ffa500;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.bottom-sections {
+    margin-top: 2rem;
+    display: grid;
+    gap: 2rem;
+}
+
+.bottom-sections section {
+    background-color: #2c2c2c;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.save-section {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.save-section button {
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-section button:hover {
+    background-color: #45a049;
+}
+
+.character-sheet {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.main-column {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.side-column {
+    width: 400px;
+    min-width: 300px;
+}
+
+/* Agent section styles */
+.agent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.agent-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#character-name {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* Progress bars for each theme */
+body.theme-magnus .progress-bar .progress-fill {
+    background-color: #00e5ff;
+}
+
+body.theme-ravi .progress-bar .progress-fill {
+    background-color: #9bc234;
+}
+
+body.theme-sergio .progress-bar .progress-fill {
+    background-color: #ff4444;
+}
+
+body.theme-roger .progress-bar .progress-fill {
+    background-color: #ffa500;
+}
+
+section {
+    background-color: rgba(40, 40, 40, 0.95);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.attribute-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.attribute, .skill-item, .inventory-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.attributes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.attribute-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.attribute-field input {
+    width: 60px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.skill-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.skill-bonus {
+    width: 80px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.roll-button {
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.roll-button:hover {
+    background-color: #45a049;
+}
+
+.roll-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.incentive-roll-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.incentive-roll-button:hover {
+    background-color: #0056b3;
+}
+
+input, select, textarea {
+    background-color: #3c3c3c;
+    border: 1px solid #4c4c4c;
+    color: #e0e0e0;
+    padding: 8px;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #6c6c6c;
+    box-shadow: 0 0 5px rgba(108, 108, 108, 0.5);
+}
+
+button {
+    background-color: #4c4c4c;
+    color: #e0e0e0;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #5c5c5c;
+    transform: translateY(-1px);
+}
+
+.stat-container {
+    margin-bottom: 20px;
+}
+
+.stat-values {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.stat-values input {
+    width: 80px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #2c2c2c;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 100%;
+    transition: width 0.3s ease;
+}
+
+.pv-bar .progress-fill {
+    background-color: #ff4444;
+}
+
+.pe-bar .progress-fill {
+    background-color: #ffaa00;
+}
+
+.san-bar .progress-fill {
+    background-color: #00ccff;
+}
+
+.skill-item {
+    background-color: #3c3c3c;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+    align-items: center;
+}
+
+.skill-item[data-level="Treinado"] {
+    border: 2px solid #4CAF50;
+}
+
+.skill-item[data-level="Veterano"] {
+    border: 2px solid #1a237e;
+}
+
+.skill-item[data-level="Expert"] {
+    border: 2px solid #e65100;
+}
+
+.inventory-item {
+    background-color: #3c3c3c;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.inventory-item-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+@media (min-width: 500px) {
+    .inventory-item-grid {
+        grid-template-columns: 2fr 1fr 1fr 3fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .bottom-sections {
+        gap: 1rem;
+    }
+}
+
+.abilities, .rituals, .notes {
+    background-color: #2c2c2c;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.abilities-header, .rituals-header, .notes-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.ability-item, .ritual-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 0.5rem;
+    background-color: #3c3c3c;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.ability-item textarea, .ritual-item textarea {
+    grid-column: 1 / -1;
+    min-height: 100px;
+    resize: vertical;
+}
+
+.note-item {
+    background-color: #3c3c3c;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.note-content {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    margin-right: 2rem;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: #ff4444;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.2rem;
+}
+
+.delete-btn:hover {
+    color: #ff0000;
+}
+
+.ability-name, .ritual-name {
+    font-weight: bold;
+}
+
+.ability-pe, .ritual-pe {
+    width: 80px;
+}
+
+#add-ability-btn, #add-ritual-btn, #add-note-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#add-ability-btn:hover, #add-ritual-btn:hover, #add-note-btn:hover {
+    background-color: #45a049;
+}
+
+.dice-history {
+    background-color: #2c2c2c;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.history-entry {
+    background-color: #3c3c3c;
+    padding: 0.8rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.history-time {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.history-skill {
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.history-details {
+    grid-column: 1 / -1;
+    color: #ccc;
+}
+
+.history-result {
+    grid-column: 1 / -1;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.level-nex-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.level-field, .nex-field {
+    flex: 1;
+}
+
+.level-field input, .nex-field input {
+    width: 100%;
+}
+
+.defense-stats, .protection-stats {
+    background-color: #2c2c2c;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.defense-stats {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.protection-stats {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.defense-stat, .protection-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.defense-stat input, .protection-stat input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #4c4c4c;
+    border-radius: 4px;
+    background-color: #3c3c3c;
+    color: white;
+}
+
+.defense-bonus {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    font-size: 0.9rem;
+    color: #4CAF50;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .character-sheet {
+        flex-direction: column;
+    }
+
+    .main-column, .side-column {
+        width: 100%;
+    }
+
+    .side-column {
+        order: -1;
+    }
+}
+
+textarea {
+    resize: vertical;
+    min-height: 60px;
+    max-height: 300px;
+    width: 100%;
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border: 1px solid #4c4c4c;
+    border-radius: 4px;
+    padding: 8px;
+    font-family: inherit;
+}
+
+/* Estilo específico para mobile */
+@media (max-width: 768px) {
+    textarea {
+        resize: vertical !important; /* Força a possibilidade de redimensionar */
+        touch-action: manipulation; /* Melhora a interação touch */
+    }
+    
+    .inventory-item textarea,
+    .ability-description,
+    .ritual-description,
+    .note-content {
+        min-height: 80px; /* Altura mínima um pouco maior no mobile */
+    }
+    
+    /* Adiciona uma pequena alça visual para redimensionamento */
+    textarea::after {
+        content: '';
+        display: block;
+        height: 10px;
+        background: linear-gradient(45deg, transparent 33.333%, #4c4c4c 33.333%, #4c4c4c 66.667%, transparent 66.667%);
+        background-size: 10px 10px;
+        margin-top: -10px;
+        opacity: 0.5;
+    }
+}
+
+.bottom-sections textarea {
+    margin-bottom: 1rem;
+}
+
+/* Character-specific theme colors */
+.character-sheet[data-character="Nikolai"] {
+    --theme-primary: #374b4c;
+    --theme-secondary: #2a3a3b;
+}
+
+.character-sheet[data-character="Math"] {
+    --theme-primary: #ffd700;
+    --theme-secondary: #b39700;
+}
+
+.character-sheet[data-character="Gl1tch"] {
+    --theme-primary: #4b0082;
+    --theme-secondary: #2d004d;
+}
+
+.character-sheet[data-character="Malta"] {
+    --theme-primary: #ffb843;
+    --theme-secondary: #cc9436;
+}
+
+.character-sheet[data-character="Fuzuki"] {
+    --theme-primary: #dc143c;
+    --theme-secondary: #a31029;
+}
+
+.character-sheet[data-character="Alfred"] {
+    --theme-primary: #000080;
+    --theme-secondary: #000066;
+}
+
+.character-sheet[data-character="Higuruma"] {
+    --theme-primary: #800000;
+    --theme-secondary: #660000;
+}
