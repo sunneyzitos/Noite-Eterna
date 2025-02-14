@@ -1,16 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Character selection handling
     const characterSelect = document.getElementById('character-name');
-    characterSelect.addEventListener('change', (e) => {
-        // Remove all existing theme classes
-        document.body.classList.remove('theme-magnus', 'theme-ravi', 'theme-sergio', 'theme-roger');
-        
-        // Add the new theme class if a character is selected
-        if (e.target.value) {
-            document.body.classList.add(`theme-${e.target.value}`);
-        }
-    });
-
     const skillsContainer = document.getElementById('skills-container');
     const inventoryContainer = document.getElementById('inventory-container');
     const addItemBtn = document.getElementById('add-item-btn');
@@ -134,10 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const skills = Array.from(skillsContainer.children);
         
         skills.sort((a, b) => {
-            const aName = a.querySelector('div').textContent.split(' (')[0];
-            const bName = b.querySelector('div').textContent.split(' (')[0];
-            const aAttr = a.querySelector('div').textContent.match(/\((.*?)\)/)[1];
-            const bAttr = b.querySelector('div').textContent.match(/\((.*?)\)/)[1];
+            const aName = a.querySelector('.skill-item').textContent.split(' (')[0];
+            const bName = b.querySelector('.skill-item').textContent.split(' (')[0];
+            const aAttr = a.querySelector('.skill-item').textContent.match(/\((.*?)\)/)[1];
+            const bAttr = b.querySelector('.skill-item').textContent.match(/\((.*?)\)/)[1];
             
             if (currentSortMethod === 'alphabetical') {
                 return aName.localeCompare(bName);
@@ -157,9 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createSkillElement(skill) {
         const skillItem = document.createElement('div');
-        skillItem.classList.add('skill-item');
+        skillItem.classList.add('skill-container');
 
         const skillLabel = document.createElement('div');
+        skillLabel.classList.add('skill-item');
         skillLabel.textContent = `${skill.name} (${skill.attr})`;
         
         const skillLevelSelect = document.createElement('select');
@@ -173,6 +164,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update defense bonuses when skill level changes for Reflexos and Fortitude
         skillLevelSelect.addEventListener('change', (e) => {
             skillItem.dataset.level = e.target.value;
+            
+            // Update skill color based on level
+            const level = e.target.value;
+            if (level === 'Treinado') {
+                skillLabel.style.backgroundColor = '#2d4a3e';
+            } else if (level === 'Veterano') {
+                skillLabel.style.backgroundColor = '#4a432d';
+            } else if (level === 'Expert') {
+                skillLabel.style.backgroundColor = '#4a2d2d';
+            } else {
+                skillLabel.style.backgroundColor = '';
+            }
             
             // Update Esquiva bonus if this is the Reflexos skill
             if (skill.name === 'Reflexos') {
@@ -203,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add regular roll button
         const rollButton = document.createElement('button');
         rollButton.textContent = '🎲';
-        rollButton.classList.add('roll-button');
+        rollButton.classList.add('roll-button', 'dice-icon');
 
         // Add incentive roll button
         const incentiveRollButton = document.createElement('button');
@@ -213,103 +216,11 @@ document.addEventListener('DOMContentLoaded', () => {
         rollButtonsContainer.appendChild(rollButton);
         rollButtonsContainer.appendChild(incentiveRollButton);
 
-        function addToHistory(diceResults, totalResult, useIncentive) {
-            const historyContainer = document.getElementById('dice-history-container');
-            const historyEntry = document.createElement('div');
-            historyEntry.classList.add('history-entry');
-            
-            const timestamp = new Date().toLocaleTimeString();
-            historyEntry.innerHTML = `
-                <div class="history-time">${timestamp}</div>
-                <div class="history-skill">${skill.name}</div>
-                <div class="history-details">
-                    Dados: ${diceResults.join(', ')}
-                    ${useIncentive ? '(+1 Incentivo)' : ''}
-                </div>
-                <div class="history-result">Total: ${totalResult}</div>
-            `;
-            
-            historyContainer.insertBefore(historyEntry, historyContainer.firstChild);
-            
-            // Limit history to last 10 rolls
-            if (historyContainer.children.length > 10) {
-                historyContainer.removeChild(historyContainer.lastChild);
-            }
-        }
-
-        function rollDice(useIncentive = false) {
-            const attrs = skill.attr.split('/');
-            let selectedAttr;
-            
-            if (attrs.length > 1) {
-                selectedAttr = prompt(`Escolha qual atributo usar para ${skill.name}:\n${attrs.join(' ou ')}`);
-                if (!selectedAttr || !attrs.includes(selectedAttr)) {
-                    alert('Atributo inválido selecionado.');
-                    return;
-                }
-            } else {
-                selectedAttr = attrs[0];
-            }
-
-            if (useIncentive) {
-                const incentivoInput = document.getElementById('attr-incentivo');
-                const incentivoValue = parseInt(incentivoInput.value) || 0;
-                
-                if (incentivoValue <= 0) {
-                    alert('Você não tem pontos de Incentivo suficientes!');
-                    return;
-                }
-                
-                incentivoInput.value = incentivoValue - 1;
-            }
-
-            const attrValue = parseInt(document.getElementById(`attr-${selectedAttr.toLowerCase()}`).value) || 0;
-            const numDice = attrValue + (useIncentive ? 1 : 0);
-            const results = [];
-            
-            // Roll the dice
-            for (let i = 0; i < numDice; i++) {
-                results.push(Math.floor(Math.random() * 20) + 1);
-            }
-
-            // Calculate bonus based on training
-            let trainingBonus = getSkillBonus(skillLevelSelect.value);
-
-            // Add additional bonus
-            const additionalBonus = parseInt(bonusInput.value) || 0;
-            const totalBonus = trainingBonus + additionalBonus;
-
-            // Get the highest roll
-            const highestRoll = Math.max(...results);
-            const finalResult = highestRoll + totalBonus;
-
-            // Add to history
-            addToHistory(results, finalResult, useIncentive);
-
-            // Display results
-            let message = `Rolagem de ${skill.name} usando ${selectedAttr}:\n`;
-            message += `Dados: ${results.join(', ')}\n`;
-            message += `Maior valor: ${highestRoll}\n`;
-            message += `Bônus de treino: ${trainingBonus}\n`;
-            message += `Bônus adicional: ${additionalBonus}\n`;
-            message += `Resultado final: ${finalResult}`;
-            
-            alert(message);
-        }
-
-        rollButton.addEventListener('click', () => rollDice(false));
-        incentiveRollButton.addEventListener('click', () => rollDice(true));
-
-        // Add event listener to update the data-level attribute
-        skillLevelSelect.addEventListener('change', (e) => {
-            skillItem.dataset.level = e.target.value;
-        });
-
+        // Add all elements to the skill container
         skillItem.appendChild(skillLabel);
         skillItem.appendChild(skillLevelSelect);
         skillItem.appendChild(bonusInput);
         skillItem.appendChild(rollButtonsContainer);
-        skillItem.dataset.level = 'Plebeu'; // Set initial level
 
         return skillItem;
     }
@@ -513,208 +424,212 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Save and Load functionality
-    saveBtn.addEventListener('click', () => {
-        const characterData = {
-            name: document.getElementById('character-name').value,
-            level: document.getElementById('level').value,
-            nex: document.getElementById('nex').value,
-            origin: document.getElementById('origin').value,
-            class: document.getElementById('class').value,
-            money: document.getElementById('money').value,
-            attributes: {
-                for: document.getElementById('attr-for').value,
-                agi: document.getElementById('attr-agi').value,
-                int: document.getElementById('attr-int').value,
-                pre: document.getElementById('attr-pre').value,
-                vig: document.getElementById('attr-vig').value,
-                incentivo: document.getElementById('attr-incentivo').value
-            },
-            stats: {
-                pv: {
-                    current: document.getElementById('pv-current').value,
-                    max: document.getElementById('pv-max').value
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            const characterData = {
+                name: document.getElementById('character-name').value,
+                level: document.getElementById('level').value,
+                nex: document.getElementById('nex').value,
+                origin: document.getElementById('origin').value,
+                class: document.getElementById('class').value,
+                money: document.getElementById('money').value,
+                attributes: {
+                    for: document.getElementById('attr-for').value,
+                    agi: document.getElementById('attr-agi').value,
+                    int: document.getElementById('attr-int').value,
+                    pre: document.getElementById('attr-pre').value,
+                    vig: document.getElementById('attr-vig').value,
+                    incentivo: document.getElementById('attr-incentivo').value
                 },
-                pe: {
-                    current: document.getElementById('pe-current').value,
-                    max: document.getElementById('pe-max').value
+                stats: {
+                    pv: {
+                        current: document.getElementById('pv-current').value,
+                        max: document.getElementById('pv-max').value
+                    },
+                    pe: {
+                        current: document.getElementById('pe-current').value,
+                        max: document.getElementById('pe-max').value
+                    },
+                    san: {
+                        current: document.getElementById('san-current').value,
+                        max: document.getElementById('san-max').value
+                    },
+                    defense: document.getElementById('defense').value,
+                    block: document.getElementById('block').value,
+                    dodge: document.getElementById('dodge').value,
+                    protection: document.getElementById('protection').value,
+                    resistance: document.getElementById('resistance').value
                 },
-                san: {
-                    current: document.getElementById('san-current').value,
-                    max: document.getElementById('san-max').value
-                },
-                defense: document.getElementById('defense').value,
-                block: document.getElementById('block').value,
-                dodge: document.getElementById('dodge').value,
-                protection: document.getElementById('protection').value,
-                resistance: document.getElementById('resistance').value
-            },
-            skills: Array.from(document.getElementById('skills-container').children).map(skill => ({
-                name: skill.querySelector('.skill-item').textContent.trim(),
-                level: skill.querySelector('select').value,
-                bonus: skill.querySelector('input.skill-bonus').value
-            })),
-            inventory: Array.from(document.getElementById('inventory-container').children).map(item => ({
-                name: item.querySelector('input[type="text"]').value,
-                weight: item.querySelector('input[type="number"]').value,
-                category: item.querySelector('select').value,
-                description: item.querySelector('textarea').value
-            })),
-            abilities: Array.from(document.getElementById('abilities-container').children).map(ability => ({
-                name: ability.querySelector('input.ability-name').value,
-                pe: ability.querySelector('input.ability-pe').value,
-                description: ability.querySelector('textarea.ability-description').value
-            })),
-            rituals: Array.from(document.getElementById('rituals-container').children).map(ritual => ({
-                name: ritual.querySelector('input.ritual-name').value,
-                pe: ritual.querySelector('input.ritual-pe').value,
-                description: ritual.querySelector('textarea.ritual-description').value
-            })),
-            notes: Array.from(document.getElementById('notes-container').children).map(note => ({
-                content: note.querySelector('textarea.note-content').value
-            }))
-        };
+                skills: Array.from(document.getElementById('skills-container').children).map(skill => ({
+                    name: skill.querySelector('.skill-item').textContent.split('(')[0].trim(),
+                    level: skill.querySelector('select').value,
+                    bonus: skill.querySelector('.skill-bonus').value
+                })),
+                inventory: Array.from(document.getElementById('inventory-container').children).map(item => ({
+                    name: item.querySelector('input[type="text"]').value,
+                    weight: item.querySelector('input[type="number"]').value,
+                    category: item.querySelector('select').value,
+                    description: item.querySelector('textarea').value
+                })),
+                abilities: Array.from(document.getElementById('abilities-container').children).map(ability => ({
+                    name: ability.querySelector('.ability-name').value,
+                    pe: ability.querySelector('.ability-pe').value,
+                    description: ability.querySelector('.ability-description').value
+                })),
+                rituals: Array.from(document.getElementById('rituals-container').children).map(ritual => ({
+                    name: ritual.querySelector('.ritual-name').value,
+                    pe: ritual.querySelector('.ritual-pe').value,
+                    description: ritual.querySelector('.ritual-description').value
+                })),
+                notes: Array.from(document.getElementById('notes-container').children).map(note => ({
+                    content: note.querySelector('.note-content').value
+                }))
+            };
 
-        try {
-            localStorage.setItem('characterData', JSON.stringify(characterData));
-            alert('Ficha salva com sucesso!');
-        } catch (error) {
-            console.error('Erro ao salvar:', error);
-            alert('Erro ao salvar a ficha. Por favor, tente novamente.');
-        }
-    });
-
-    loadBtn.addEventListener('click', () => {
-        try {
-            const savedData = localStorage.getItem('characterData');
-            if (savedData) {
-                const characterData = JSON.parse(savedData);
-                
-                // Load basic info
-                document.getElementById('character-name').value = characterData.name || '';
-                document.getElementById('level').value = characterData.level || '1';
-                document.getElementById('nex').value = characterData.nex || '0';
-                document.getElementById('origin').value = characterData.origin || '';
-                document.getElementById('class').value = characterData.class || '';
-                document.getElementById('money').value = characterData.money || '';
-
-                // Load attributes
-                const attributes = characterData.attributes || {};
-                document.getElementById('attr-for').value = attributes.for || '0';
-                document.getElementById('attr-agi').value = attributes.agi || '0';
-                document.getElementById('attr-int').value = attributes.int || '0';
-                document.getElementById('attr-pre').value = attributes.pre || '0';
-                document.getElementById('attr-vig').value = attributes.vig || '0';
-                document.getElementById('attr-incentivo').value = attributes.incentivo || '0';
-
-                // Load stats
-                const stats = characterData.stats || {};
-                document.getElementById('pv-current').value = stats.pv?.current || '0';
-                document.getElementById('pv-max').value = stats.pv?.max || '0';
-                document.getElementById('pe-current').value = stats.pe?.current || '0';
-                document.getElementById('pe-max').value = stats.pe?.max || '0';
-                document.getElementById('san-current').value = stats.san?.current || '0';
-                document.getElementById('san-max').value = stats.san?.max || '0';
-                document.getElementById('defense').value = stats.defense || '0';
-                document.getElementById('block').value = stats.block || '0';
-                document.getElementById('dodge').value = stats.dodge || '0';
-                document.getElementById('protection').value = stats.protection || '0';
-                document.getElementById('resistance').value = stats.resistance || '0';
-
-                // Update progress bars
-                ['pv', 'pe', 'san'].forEach(stat => {
-                    updateProgressBar(`${stat}-current`, `${stat}-max`, `.${stat}-bar`);
-                });
-
-                // Load skills
-                const skillsContainer = document.getElementById('skills-container');
-                skillsContainer.innerHTML = '';
-                if (characterData.skills) {
-                    characterData.skills.forEach(skillData => {
-                        const skillElement = createSkillElement({ name: skillData.name });
-                        skillElement.querySelector('select').value = skillData.level;
-                        skillElement.querySelector('input.skill-bonus').value = skillData.bonus;
-                        
-                        // Restore skill colors based on level
-                        const level = skillData.level;
-                        const skillDiv = skillElement.querySelector('.skill-item');
-                        if (level === 'Treinado') {
-                            skillDiv.style.backgroundColor = '#2d4a3e';
-                        } else if (level === 'Veterano') {
-                            skillDiv.style.backgroundColor = '#4a432d';
-                        } else if (level === 'Expert') {
-                            skillDiv.style.backgroundColor = '#4a2d2d';
-                        } else {
-                            skillDiv.style.backgroundColor = '';
-                        }
-                        
-                        skillsContainer.appendChild(skillElement);
-                    });
-                }
-
-                // Load inventory
-                const inventoryContainer = document.getElementById('inventory-container');
-                inventoryContainer.innerHTML = '';
-                if (characterData.inventory) {
-                    characterData.inventory.forEach(itemData => {
-                        const itemElement = createInventoryItemElement();
-                        itemElement.querySelector('input[type="text"]').value = itemData.name;
-                        itemElement.querySelector('input[type="number"]').value = itemData.weight;
-                        itemElement.querySelector('select').value = itemData.category;
-                        itemElement.querySelector('textarea').value = itemData.description;
-                        inventoryContainer.appendChild(itemElement);
-                    });
-                }
-
-                // Load abilities
-                const abilitiesContainer = document.getElementById('abilities-container');
-                abilitiesContainer.innerHTML = '';
-                if (characterData.abilities) {
-                    characterData.abilities.forEach(abilityData => {
-                        const abilityElement = createAbilityElement();
-                        abilityElement.querySelector('input.ability-name').value = abilityData.name;
-                        abilityElement.querySelector('input.ability-pe').value = abilityData.pe;
-                        abilityElement.querySelector('textarea.ability-description').value = abilityData.description;
-                        abilitiesContainer.appendChild(abilityElement);
-                    });
-                }
-
-                // Load rituals
-                const ritualsContainer = document.getElementById('rituals-container');
-                ritualsContainer.innerHTML = '';
-                if (characterData.rituals) {
-                    characterData.rituals.forEach(ritualData => {
-                        const ritualElement = createRitualElement();
-                        ritualElement.querySelector('input.ritual-name').value = ritualData.name;
-                        ritualElement.querySelector('input.ritual-pe').value = ritualData.pe;
-                        ritualElement.querySelector('textarea.ritual-description').value = ritualData.description;
-                        ritualsContainer.appendChild(ritualElement);
-                    });
-                }
-
-                // Load notes
-                const notesContainer = document.getElementById('notes-container');
-                notesContainer.innerHTML = '';
-                if (characterData.notes) {
-                    characterData.notes.forEach(noteData => {
-                        const noteElement = createNoteElement();
-                        noteElement.querySelector('textarea.note-content').value = noteData.content;
-                        notesContainer.appendChild(noteElement);
-                    });
-                }
-
-                // Restore theme colors for character name
-                const characterName = document.getElementById('character-name');
-                if (characterName.value) {
-                    updateThemeColors(characterName.value);
-                }
-
-                alert('Ficha carregada com sucesso!');
-            } else {
-                alert('Nenhuma ficha salva encontrada!');
+            try {
+                localStorage.setItem('characterData', JSON.stringify(characterData));
+                alert('Ficha salva com sucesso!');
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                alert('Erro ao salvar a ficha. Por favor, tente novamente.');
             }
-        } catch (error) {
-            console.error('Erro ao carregar:', error);
-            alert('Erro ao carregar a ficha. Por favor, tente novamente.');
-        }
-    });
+        });
+    }
+
+    if (loadBtn) {
+        loadBtn.addEventListener('click', () => {
+            try {
+                const savedData = localStorage.getItem('characterData');
+                if (savedData) {
+                    const characterData = JSON.parse(savedData);
+                    
+                    // Load basic info
+                    document.getElementById('character-name').value = characterData.name || '';
+                    document.getElementById('level').value = characterData.level || '1';
+                    document.getElementById('nex').value = characterData.nex || '0';
+                    document.getElementById('origin').value = characterData.origin || '';
+                    document.getElementById('class').value = characterData.class || '';
+                    document.getElementById('money').value = characterData.money || '';
+
+                    // Load attributes
+                    const attributes = characterData.attributes || {};
+                    document.getElementById('attr-for').value = attributes.for || '0';
+                    document.getElementById('attr-agi').value = attributes.agi || '0';
+                    document.getElementById('attr-int').value = attributes.int || '0';
+                    document.getElementById('attr-pre').value = attributes.pre || '0';
+                    document.getElementById('attr-vig').value = attributes.vig || '0';
+                    document.getElementById('attr-incentivo').value = attributes.incentivo || '0';
+
+                    // Load stats
+                    const stats = characterData.stats || {};
+                    document.getElementById('pv-current').value = stats.pv?.current || '0';
+                    document.getElementById('pv-max').value = stats.pv?.max || '0';
+                    document.getElementById('pe-current').value = stats.pe?.current || '0';
+                    document.getElementById('pe-max').value = stats.pe?.max || '0';
+                    document.getElementById('san-current').value = stats.san?.current || '0';
+                    document.getElementById('san-max').value = stats.san?.max || '0';
+                    document.getElementById('defense').value = stats.defense || '0';
+                    document.getElementById('block').value = stats.block || '0';
+                    document.getElementById('dodge').value = stats.dodge || '0';
+                    document.getElementById('protection').value = stats.protection || '0';
+                    document.getElementById('resistance').value = stats.resistance || '0';
+
+                    // Update progress bars
+                    ['pv', 'pe', 'san'].forEach(stat => {
+                        updateProgressBar(`${stat}-current`, `${stat}-max`, `.${stat}-bar`);
+                    });
+
+                    // Load skills
+                    const skillsContainer = document.getElementById('skills-container');
+                    skillsContainer.innerHTML = '';
+                    if (characterData.skills) {
+                        characterData.skills.forEach(skillData => {
+                            const skillElement = createSkillElement({ name: skillData.name });
+                            skillElement.querySelector('select').value = skillData.level;
+                            skillElement.querySelector('.skill-bonus').value = skillData.bonus;
+                            
+                            // Restore skill colors based on level
+                            const level = skillData.level;
+                            const skillDiv = skillElement.querySelector('.skill-item');
+                            if (level === 'Treinado') {
+                                skillDiv.style.backgroundColor = '#2d4a3e';
+                            } else if (level === 'Veterano') {
+                                skillDiv.style.backgroundColor = '#4a432d';
+                            } else if (level === 'Expert') {
+                                skillDiv.style.backgroundColor = '#4a2d2d';
+                            } else {
+                                skillDiv.style.backgroundColor = '';
+                            }
+                            
+                            skillsContainer.appendChild(skillElement);
+                        });
+                    }
+
+                    // Load inventory
+                    const inventoryContainer = document.getElementById('inventory-container');
+                    inventoryContainer.innerHTML = '';
+                    if (characterData.inventory) {
+                        characterData.inventory.forEach(itemData => {
+                            const itemElement = createInventoryItemElement();
+                            itemElement.querySelector('input[type="text"]').value = itemData.name;
+                            itemElement.querySelector('input[type="number"]').value = itemData.weight;
+                            itemElement.querySelector('select').value = itemData.category;
+                            itemElement.querySelector('textarea').value = itemData.description;
+                            inventoryContainer.appendChild(itemElement);
+                        });
+                    }
+
+                    // Load abilities
+                    const abilitiesContainer = document.getElementById('abilities-container');
+                    abilitiesContainer.innerHTML = '';
+                    if (characterData.abilities) {
+                        characterData.abilities.forEach(abilityData => {
+                            const abilityElement = createAbilityElement();
+                            abilityElement.querySelector('.ability-name').value = abilityData.name;
+                            abilityElement.querySelector('.ability-pe').value = abilityData.pe;
+                            abilityElement.querySelector('.ability-description').value = abilityData.description;
+                            abilitiesContainer.appendChild(abilityElement);
+                        });
+                    }
+
+                    // Load rituals
+                    const ritualsContainer = document.getElementById('rituals-container');
+                    ritualsContainer.innerHTML = '';
+                    if (characterData.rituals) {
+                        characterData.rituals.forEach(ritualData => {
+                            const ritualElement = createRitualElement();
+                            ritualElement.querySelector('.ritual-name').value = ritualData.name;
+                            ritualElement.querySelector('.ritual-pe').value = ritualData.pe;
+                            ritualElement.querySelector('.ritual-description').value = ritualData.description;
+                            ritualsContainer.appendChild(ritualElement);
+                        });
+                    }
+
+                    // Load notes
+                    const notesContainer = document.getElementById('notes-container');
+                    notesContainer.innerHTML = '';
+                    if (characterData.notes) {
+                        characterData.notes.forEach(noteData => {
+                            const noteElement = createNoteElement();
+                            noteElement.querySelector('.note-content').value = noteData.content;
+                            notesContainer.appendChild(noteElement);
+                        });
+                    }
+
+                    // Restore theme colors for character name
+                    const characterName = document.getElementById('character-name');
+                    if (characterName.value) {
+                        updateThemeColors(characterName.value);
+                    }
+
+                    alert('Ficha carregada com sucesso!');
+                } else {
+                    alert('Nenhuma ficha salva encontrada!');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar:', error);
+                alert('Erro ao carregar a ficha. Por favor, tente novamente.');
+            }
+        });
+    }
 });
