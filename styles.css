@@ -11,54 +11,6 @@ body {
 }
 
 /* Character-specific themes */
-body.theme-magnus {
-    background: linear-gradient(135deg, #00e5ff 0%, #006c80 100%);
-    color: #00e5ff;
-}
-
-body.theme-magnus h1,
-body.theme-magnus h2,
-body.theme-magnus label {
-    color: #00e5ff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-body.theme-ravi {
-    background: linear-gradient(135deg, #6b8e23 0%, #3d5214 100%);
-    color: #9bc234;
-}
-
-body.theme-ravi h1,
-body.theme-ravi h2,
-body.theme-ravi label {
-    color: #9bc234;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-body.theme-sergio {
-    background: linear-gradient(135deg, #ff4444 0%, #802222 100%);
-    color: #ff4444;
-}
-
-body.theme-sergio h1,
-body.theme-sergio h2,
-body.theme-sergio label {
-    color: #ff4444;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-body.theme-roger {
-    background: linear-gradient(135deg, #ff8c00 0%, #804600 100%);
-    color: #ffa500;
-}
-
-body.theme-roger h1,
-body.theme-roger h2,
-body.theme-roger label {
-    color: #ffa500;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
 [data-character="Nikolai"] {
     background: linear-gradient(to bottom, #222f33 0%, #000000 100%);
     color: #222f33;
@@ -94,36 +46,71 @@ body.theme-roger label {
     color: #000080;
 }
 
-[data-character="Nikolai"] .dice-icon {
-    color: #222f33;
-}
-
-[data-character="Malta"] .dice-icon {
-    color: #ffb843;
-}
-
-[data-character="Math"] .dice-icon {
-    color: #ffd700;
-}
-
-[data-character="Higuruma"] .dice-icon {
-    color: #800000;
-}
-
-[data-character="Fuzuki"] .dice-icon {
-    color: #dc143c;
-}
-
-[data-character="Gl1tch"] .dice-icon {
-    color: #4b0082;
-}
-
-[data-character="Alfred"] .dice-icon {
-    color: #000080;
+[data-character] .dice-icon {
+    color: inherit;
 }
 
 .incentive-value {
     color: inherit !important;
+}
+
+.agent-info,
+.statistics,
+.attributes,
+.skills,
+.inventory,
+.abilities,
+.rituals,
+.notes {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.agent-grid,
+.stat-bars,
+.attributes-grid,
+.skills-container,
+.inventory-container,
+.abilities-container,
+.rituals-container,
+.notes-container {
+    background-color: rgba(20, 20, 20, 0.8);
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.agent-field label,
+.stat-container label,
+h1, h2, h3,
+.skill-item,
+input, select, textarea {
+    color: #ffffff !important;
+}
+
+.progress-bar {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+button {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+input, select, textarea {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: rgba(255, 255, 255, 0.4);
+    outline: none;
 }
 
 .container {
@@ -184,7 +171,6 @@ body.theme-roger label {
     min-width: 300px;
 }
 
-/* Agent section styles */
 .agent-grid {
     display: grid;
     gap: 1rem;
@@ -217,7 +203,6 @@ body.theme-roger label {
     flex: 1;
 }
 
-/* Character theme colors */
 [data-character="Nikolai"] {
     --theme-primary: #374b4c;
     --theme-secondary: #2a3a3b;
@@ -253,7 +238,6 @@ body.theme-roger label {
     --theme-secondary: #660000;
 }
 
-/* Default theme */
 :root {
     --theme-primary: #4a4a4a;
     --theme-secondary: #2d2d2d;
@@ -270,7 +254,6 @@ body.theme-roger label {
     }
 }
 
-/* Progress bars for each theme */
 body.theme-magnus .progress-bar .progress-fill {
     background-color: #00e5ff;
 }
@@ -708,7 +691,6 @@ textarea {
     font-family: inherit;
 }
 
-/* Estilo específico para mobile */
 @media (max-width: 768px) {
     textarea {
         resize: vertical !important; /* Força a possibilidade de redimensionar */
@@ -738,7 +720,6 @@ textarea {
     margin-bottom: 1rem;
 }
 
-/* Character-specific theme colors */
 .character-sheet[data-character="Nikolai"] {
     --theme-primary: #374b4c;
     --theme-secondary: #2a3a3b;
