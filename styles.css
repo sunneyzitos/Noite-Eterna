@@ -120,19 +120,87 @@ body.theme-roger label {
 /* Agent section styles */
 .agent-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--theme-secondary);
+    border-radius: 8px;
 }
 
 .agent-field {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 0.5rem;
 }
 
-#character-name {
-    font-weight: bold;
-    font-size: 1.1em;
+.agent-field input,
+.agent-field select {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--theme-primary);
+    background-color: #1c1c1c;
+    color: #ffffff;
+}
+
+.level-nex-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.level-nex-group .agent-field {
+    flex: 1;
+}
+
+/* Character theme colors */
+[data-character="Nikolai"] {
+    --theme-primary: #374b4c;
+    --theme-secondary: #2a3a3b;
+}
+
+[data-character="Math"] {
+    --theme-primary: #ffd700;
+    --theme-secondary: #b39700;
+}
+
+[data-character="Gl1tch"] {
+    --theme-primary: #4b0082;
+    --theme-secondary: #2d004d;
+}
+
+[data-character="Malta"] {
+    --theme-primary: #ffb843;
+    --theme-secondary: #cc9436;
+}
+
+[data-character="Fuzuki"] {
+    --theme-primary: #dc143c;
+    --theme-secondary: #a31029;
+}
+
+[data-character="Alfred"] {
+    --theme-primary: #000080;
+    --theme-secondary: #000066;
+}
+
+[data-character="Higuruma"] {
+    --theme-primary: #800000;
+    --theme-secondary: #660000;
+}
+
+/* Default theme */
+:root {
+    --theme-primary: #4a4a4a;
+    --theme-secondary: #2d2d2d;
+}
+
+@media (max-width: 768px) {
+    .agent-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .level-nex-group {
+        display: flex;
+        gap: 1rem;
+    }
 }
 
 /* Progress bars for each theme */

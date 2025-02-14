@@ -73,25 +73,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function getThemeColors(characterName) {
+    function updateThemeColors(characterName) {
+        let primary, secondary;
+        
         switch (characterName) {
             case 'Nikolai':
-                return { primary: '#374b4c', secondary: '#2a3a3b' };
+                primary = '#374b4c';
+                secondary = '#2a3a3b';
+                break;
             case 'Math':
-                return { primary: '#ffd700', secondary: '#b39700' };
+                primary = '#ffd700';
+                secondary = '#b39700';
+                break;
             case 'Gl1tch':
-                return { primary: '#4b0082', secondary: '#2d004d' };
+                primary = '#4b0082';
+                secondary = '#2d004d';
+                break;
             case 'Malta':
-                return { primary: '#ffb843', secondary: '#cc9436' };
+                primary = '#ffb843';
+                secondary = '#cc9436';
+                break;
             case 'Fuzuki':
-                return { primary: '#dc143c', secondary: '#a31029' };
+                primary = '#dc143c';
+                secondary = '#a31029';
+                break;
             case 'Alfred':
-                return { primary: '#000080', secondary: '#000066' };
+                primary = '#000080';
+                secondary = '#000066';
+                break;
             case 'Higuruma':
-                return { primary: '#800000', secondary: '#660000' };
+                primary = '#800000';
+                secondary = '#660000';
+                break;
             default:
-                return { primary: '#4a4a4a', secondary: '#2d2d2d' };
+                primary = '#4a4a4a';
+                secondary = '#2d2d2d';
         }
+
+        document.documentElement.style.setProperty('--theme-primary', primary);
+        document.documentElement.style.setProperty('--theme-secondary', secondary);
+        document.querySelector('.character-sheet').dataset.character = characterName || '';
+    }
+
+    // Initialize character selection and theme
+    // Remove the duplicate declaration since we already have it from earlier
+    
+    // Character theme initialization
+    characterSelect.addEventListener('change', (e) => {
+        updateThemeColors(e.target.value);
+    });
+
+    // Set initial colors if a character is selected
+    if (characterSelect.value) {
+        updateThemeColors(characterSelect.value);
     }
 
     function sortSkills() {
@@ -316,14 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(`${stat}-max`).addEventListener('input', () => {
             updateProgressBar(`${stat}-current`, `${stat}-max`, `.${stat}-bar`);
         });
-    });
-
-    // Update character theme when name changes
-    document.getElementById('character-name').addEventListener('change', (e) => {
-        const colors = getThemeColors(e.target.value);
-        document.documentElement.style.setProperty('--theme-primary', colors.primary);
-        document.documentElement.style.setProperty('--theme-secondary', colors.secondary);
-        document.querySelector('.character-sheet').dataset.character = e.target.value;
     });
 
     function createInventoryItemElement() {
@@ -677,9 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Restore theme colors for character name
                 const characterName = document.getElementById('character-name');
                 if (characterName.value) {
-                    const nameColors = getThemeColors(characterName.value);
-                    document.documentElement.style.setProperty('--theme-primary', nameColors.primary);
-                    document.documentElement.style.setProperty('--theme-secondary', nameColors.secondary);
+                    updateThemeColors(characterName.value);
                 }
 
                 alert('Ficha carregada com sucesso!');
